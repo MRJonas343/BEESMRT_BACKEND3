@@ -1,0 +1,33 @@
+services:
+  db:
+    container_name: mysql_db
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DBPASS}
+      MYSQL_DATABASE: ${DBNAME}
+      MYSQL_USER: ${DBUSER}
+      MYSQL_PASSWORD: ${DBPASS}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  backend:
+    container_name: hono_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      PORT : ${PORT}
+      DBHOST: ${DBHOST}
+      DBUSER: ${DBUSER}
+      DBPASS: ${DBPASS}
+      DBNAME: ${DBNAME}
+      DBPORT: ${DBPORT}
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:

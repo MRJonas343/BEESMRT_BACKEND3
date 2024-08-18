@@ -11,10 +11,9 @@ server.use(
 		credentials: true,
 	}),
 )
-
 server.route("/", app)
 
 export default {
-	port: Bun.env.PORT,
+	port: Bun.env.PORT ?? 3000,
 	fetch: server.fetch,
 }
