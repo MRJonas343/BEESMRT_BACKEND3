@@ -9,14 +9,14 @@ services:
       MYSQL_PASSWORD: ${DBPASS}
     volumes:
       - db_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
+    command: --init-file /docker-entrypoint-initdb.d/backup.sql
 
   backend:
     container_name: hono_backend
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: jhon343/beesmrtbackend:canary
     depends_on:
       - db
     environment:
