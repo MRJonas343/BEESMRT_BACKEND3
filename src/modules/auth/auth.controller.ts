@@ -9,6 +9,7 @@ import {
 	updateCookie,
 } from "../../utils"
 import { validateNewUserMiddleware, validateUserMiddleware } from "./validators"
+import { deleteCookie } from "hono/cookie"
 
 const factory = new Factory()
 
@@ -24,9 +25,7 @@ export const loginController = factory.createHandlers(
 
 		const token = await createToken()
 
-		updateCookie(c, token)
-
-		await setNewCookie(c, token)
+		await updateCookie(c, token)
 
 		const { email, nickName, englishLevel } = user.data!
 
@@ -59,3 +58,9 @@ export const signupController = factory.createHandlers(
 		return c.json({ email, nickName, englishLevel })
 	},
 )
+
+export const logOutController = factory.createHandlers(async (c) => {
+	deleteCookie(c, "token")
+
+	return c.json({ succes: true })
+})
