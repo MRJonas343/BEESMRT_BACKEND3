@@ -3,9 +3,24 @@ import { StatusCode } from "hono/utils/http-status"
 export enum ErrorName {
 	EMAIL_ALREADY_EXISTS = "ERR_EMAIL_ALREADY_EXISTS",
 	INVALID_CREDENTIALS = "ERR_INVALID_CREDENTIALS",
+	INVALID_USER_EMAIL = "ERR_INVALID_USER_EMAIL",
+	INVALID_USER_PASSWORD = "ERR_INVALID_USER_PASSWORD",
+	INVALID_USER_NICKNAME = "ERR_INVALID_USER_NICKNAME",
+	INVALID_ENGLISH_LEVEL = "ERR_INVALID_ENGLISH_LEVEL",
 }
 
 export const errorCodeMap: Record<ErrorName, StatusCode> = {
-	[ErrorName.EMAIL_ALREADY_EXISTS]: 409, // Conflicto
-	[ErrorName.INVALID_CREDENTIALS]: 401, // No autorizad
+	[ErrorName.EMAIL_ALREADY_EXISTS]: 409,
+	[ErrorName.INVALID_CREDENTIALS]: 401,
+	[ErrorName.INVALID_USER_EMAIL]: 400,
+	[ErrorName.INVALID_USER_PASSWORD]: 400,
+	[ErrorName.INVALID_USER_NICKNAME]: 400,
+	[ErrorName.INVALID_ENGLISH_LEVEL]: 400,
 }
+
+export const zodErrorsMap = new Map<string, ErrorName>([
+	["email", ErrorName.INVALID_USER_EMAIL],
+	["password", ErrorName.INVALID_USER_PASSWORD],
+	["nickName", ErrorName.INVALID_USER_NICKNAME],
+	["englishLevel", ErrorName.INVALID_ENGLISH_LEVEL],
+])

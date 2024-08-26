@@ -1,7 +1,7 @@
 import { Factory } from "hono/factory"
-import exampleMiddleware from "../../middleware/example.middleware"
 import { sendErrorResponse } from "../../utils/sendError"
 import { ErrorName } from "../../errors/errors"
+import { validateNewUserMiddleware } from "./validators/validateNewUser"
 
 const factory = new Factory()
 
@@ -11,8 +11,17 @@ export const loginController = factory.createHandlers(async (c) => {
 })
 
 export const signupController = factory.createHandlers(
-	exampleMiddleware,
-	(c) => {
-		return c.json({ message: "Factory??" })
+	validateNewUserMiddleware,
+	async (c) => {
+		const body = await c.req.json()
+
+		//*validate the data
+		//*chek if the email already exists
+		//*hash the password
+		//*create a new user
+		//*generate a token
+		//*send the token as a cookie
+		//*send the user data
+		return c.json(body)
 	},
 )
