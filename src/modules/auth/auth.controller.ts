@@ -1,27 +1,61 @@
 import { Factory } from "hono/factory"
-import { sendErrorResponse } from "../../utils/sendError"
 import { ErrorName } from "../../errors/errors"
-import { validateNewUserMiddleware } from "./validators/validateNewUser"
+import { createUser, findUser } from "./repository/auth.repository"
+import {
+	hashPassword,
+	sendErrorResponse,
+	setNewCookie,
+	createToken,
+	updateCookie,
+} from "../../utils"
+import { validateNewUserMiddleware, validateUserMiddleware } from "./validators"
 
 const factory = new Factory()
 
-export const loginController = factory.createHandlers(async (c) => {
-	//const body = await c.req.json()
-	return sendErrorResponse(c, ErrorName.EMAIL_ALREADY_EXISTS)
-})
+export const loginController = factory.createHandlers(
+	validateUserMiddleware,
+	async (c) => {
+		const body = await c.req.json()
+
+		const user = await findUser(body.email)
+		if (!user.success) {
+			return sendErrorResponse(c, ErrorName.SERVER_ERROR)
+		}
+
+		const token = await createToken()
+
+		updateCookie(c, token)
+
+		await setNewCookie(c, token)
+
+		const { email, nickName, englishLevel } = user.data!
+
+		return c.json({ email, nickName, englishLevel })
+	},
+)
 
 export const signupController = factory.createHandlers(
 	validateNewUserMiddleware,
 	async (c) => {
-		const body = await c.req.json()
+		const { email, password, nickName, englishLevel } = await c.req.json()
 
-		//*validate the data
-		//*chek if the email already exists
-		//*hash the password
-		//*create a new user
-		//*generate a token
-		//*send the token as a cookie
-		//*send the user data
-		return c.json(body)
+		const hashedPassword = await hashPassword(password)
+
+		const newUser = await createUser(
+			email,
+			hashedPassword,
+			nickName,
+			englishLevel,
+		)
+
+		if (!newUser.success) {
+			return sendErrorResponse(c, ErrorName.SERVER_ERROR)
+		}
+
+		const token = await createToken()
+
+		await setNewCookie(c, token)
+
+		return c.json({ email, nickName, englishLevel })
 	},
 )

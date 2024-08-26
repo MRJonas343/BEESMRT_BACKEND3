@@ -14,7 +14,6 @@ server.use(
 server.route("/", app)
 
 export default {
-	//port: Bun.env.PORT ?? 3000,
-	port: 4000,
+	port: Bun.env.ENV === "production" ? Number(Bun.env.PORT) : 4000,
 	fetch: server.fetch,
 }

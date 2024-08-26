@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/mysql2"
 import { tablesSchemas } from "./tables"
 
 const poolConnection = mysql.createPool({
-	host: Bun.env.DBHOST,
+	host: Bun.env.DBHOSTPOOL,
 	user: Bun.env.DBUSER,
 	password: Bun.env.DBPASS,
 	database: Bun.env.DBNAME,

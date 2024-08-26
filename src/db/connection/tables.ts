@@ -4,8 +4,8 @@ import {
 	messagesForm,
 	hangmanGameLevels,
 	memoryGameLevels,
-	normalUserInfo,
-	userTrophys,
+	users,
+	playerTrophies,
 } from "../schemas"
 
 export const tablesSchemas = {
@@ -14,6 +14,6 @@ export const tablesSchemas = {
 	messagesForm,
 	hangmanGameLevels,
 	memoryGameLevels,
-	normalUserInfo,
-	userTrophys,
+	users,
+	playerTrophies,
 }

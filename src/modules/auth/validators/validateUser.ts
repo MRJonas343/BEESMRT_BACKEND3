@@ -1,14 +1,15 @@
 import { createFactory } from "hono/factory"
-import { newUserSchema } from "../interfaces/newUser.interface"
 import { sendErrorResponse } from "../../../utils/sendError"
 import { ErrorName, zodErrorsMap } from "../../../errors/errors"
 import { findUser } from "../repository/auth.repository"
+import { existingUserSchema } from "../interfaces/newUser.interface"
+import { comparePassword } from "../../../utils"
 
 const factory = createFactory()
 
-const validateNewUserMiddleware = factory.createMiddleware(async (c, next) => {
+const validateUserMiddleware = factory.createMiddleware(async (c, next) => {
 	const body = await c.req.json()
-	const newUser = newUserSchema.safeParse(body)
+	const newUser = existingUserSchema.safeParse(body)
 
 	//*Check if the user data is valid
 	if (!newUser.success) {
@@ -26,17 +27,24 @@ const validateNewUserMiddleware = factory.createMiddleware(async (c, next) => {
 		}
 	}
 
-	//*Check if the email already exists
+	//*Check if the email exists
 	const user = await findUser(body.email)
 	if (!user.success) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 
-	if (user.success && user.data) {
-		return sendErrorResponse(c, ErrorName.EMAIL_ALREADY_EXISTS)
+	if (!user.data || !user.data.email) {
+		return sendErrorResponse(c, ErrorName.USER_NOT_FOUND)
 	}
 
+	//*Check if the password is correct
+	const hashedPassword = user.data.password!
+	const isPasswordCorrect = await comparePassword(body.password, hashedPassword)
+
+	if (!isPasswordCorrect) {
+		return sendErrorResponse(c, ErrorName.INVALID_USER_PASSWORD)
+	}
 	return next()
 })
 
-export { validateNewUserMiddleware }
+export { validateUserMiddleware }

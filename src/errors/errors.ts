@@ -7,6 +7,8 @@ export enum ErrorName {
 	INVALID_USER_PASSWORD = "ERR_INVALID_USER_PASSWORD",
 	INVALID_USER_NICKNAME = "ERR_INVALID_USER_NICKNAME",
 	INVALID_ENGLISH_LEVEL = "ERR_INVALID_ENGLISH_LEVEL",
+	SERVER_ERROR = "ERR_SERVER_ERROR",
+	USER_NOT_FOUND = "ERR_USER_NOT_FOUND",
 }
 
 export const errorCodeMap: Record<ErrorName, StatusCode> = {
@@ -16,6 +18,8 @@ export const errorCodeMap: Record<ErrorName, StatusCode> = {
 	[ErrorName.INVALID_USER_PASSWORD]: 400,
 	[ErrorName.INVALID_USER_NICKNAME]: 400,
 	[ErrorName.INVALID_ENGLISH_LEVEL]: 400,
+	[ErrorName.SERVER_ERROR]: 500,
+	[ErrorName.USER_NOT_FOUND]: 404,
 }
 
 export const zodErrorsMap = new Map<string, ErrorName>([
