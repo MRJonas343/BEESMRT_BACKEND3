@@ -1,5 +1,5 @@
 import { Context } from "hono"
-import { deleteCookie, setSignedCookie } from "hono/cookie"
+import { deleteCookie, setSignedCookie, getSignedCookie } from "hono/cookie"
 
 const cookieSettings = {
 	httpOnly: true,
@@ -17,4 +17,9 @@ const updateCookie = async (c: Context, token: string) => {
 	await setNewCookie(c, token)
 }
 
-export { setNewCookie, updateCookie }
+const getCookie = async (c: Context) => {
+	const cookie = await getSignedCookie(c, Bun.env.COOKIESECRET!)
+	return cookie
+}
+
+export { setNewCookie, updateCookie, getCookie }

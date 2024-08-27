@@ -1,6 +1,7 @@
 import { Hono } from "hono"
 import auth from "./modules/auth"
-import contact from "./modules/contact"
+import levels from "./modules/levels"
+
 const app = new Hono()
 
 app.get("/", (c) => {
@@ -14,7 +15,7 @@ app.notFound((c) => {
 //*Auth Module
 app.route("/auth", auth)
 
-//*Contact Module
-app.route("/contact", contact)
+//*Levels Module
+app.route("/levels", levels)
 
 export default app

@@ -8,7 +8,10 @@ import {
 	createToken,
 	updateCookie,
 } from "../../utils"
-import { validateNewUserMiddleware, validateUserMiddleware } from "./validators"
+import {
+	validateNewUserMiddleware,
+	validateUserMiddleware,
+} from "./middlewares"
 import { deleteCookie } from "hono/cookie"
 
 const factory = new Factory()
