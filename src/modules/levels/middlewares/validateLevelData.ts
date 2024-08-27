@@ -7,10 +7,9 @@ const factory = createFactory()
 
 const validateLevelDataMiddleware = factory.createMiddleware(
 	async (c, next) => {
-		const { game, level } = c.req.query()
-		console.log(game, level)
+		const { game, email } = c.req.query()
 
-		const levelData = levelDataSchema.safeParse({ game, level })
+		const levelData = levelDataSchema.safeParse({ game, email })
 
 		if (!levelData.success) {
 			const firstError = levelData.error.errors.find(

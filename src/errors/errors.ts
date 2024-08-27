@@ -11,6 +11,7 @@ export enum ErrorName {
 	USER_NOT_FOUND = "ERR_USER_NOT_FOUND",
 	INVALID_GAME = "ERR_INVALID_GAME",
 	INVALID_LEVEL = "ERR_INVALID_LEVEL",
+	TOKEN_EXPIRED = "ERR_TOKEN_EXPIRED",
 }
 
 export const errorCodeMap: Record<ErrorName, StatusCode> = {
@@ -24,6 +25,7 @@ export const errorCodeMap: Record<ErrorName, StatusCode> = {
 	[ErrorName.USER_NOT_FOUND]: 404,
 	[ErrorName.INVALID_GAME]: 400,
 	[ErrorName.INVALID_LEVEL]: 400,
+	[ErrorName.TOKEN_EXPIRED]: 401,
 }
 
 export const zodErrorsMap = new Map<string, ErrorName>([

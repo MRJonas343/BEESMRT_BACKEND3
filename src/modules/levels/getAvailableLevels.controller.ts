@@ -1,19 +1,24 @@
 import { Factory } from "hono/factory"
-import { validateLevelDataMiddleware } from "./middlewares/validateLevelData"
-import { validateUserSessionMiddleware } from "./middlewares/validateUserSession"
+import { getLevels, getTrophies } from "./repository/levels.repository"
 
 const factory = new Factory()
 
-export const getAvailableLevelsController = factory.createHandlers(
-	validateLevelDataMiddleware,
-	validateUserSessionMiddleware,
-	async (c) => {
-		//*chek is the data is valid ✅
-		//*chek if the user is authenticated
-		//*if not just make the query of the levels
-		//*if yes make the query of the levels and the trophies
-		//*then join the data and return it
+const getAvailableLevelsController = factory.createHandlers(async (c) => {
+	const { game, email } = c.req.query()
 
-		return c.json("ssss")
-	},
-)
+	const [levels, trophies] = await Promise.all([
+		getLevels(game),
+		getTrophies(game, email),
+	])
+
+	const data = levels.map((level) => {
+		const { englishLevel, levelName, levels: Level } = level
+		const userTrophy = trophies.find((trophy) => trophy.level === Level)
+		const Trophys = userTrophy ? userTrophy.trophys : 0
+		return { englishLevel, levelName, Level, Trophys }
+	})
+
+	return c.json(data)
+})
+
+export { getAvailableLevelsController }

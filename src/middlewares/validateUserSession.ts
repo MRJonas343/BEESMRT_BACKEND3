@@ -1,5 +1,7 @@
 import { createFactory } from "hono/factory"
-import { getCookie, validateJWT } from "../../../utils"
+import { getCookie, validateJWT, sendErrorResponse } from "../utils"
+import { deleteCookie } from "hono/cookie"
+import { ErrorName } from "../errors/errors"
 const factory = createFactory()
 
 const validateUserSessionMiddleware = factory.createMiddleware(
@@ -7,17 +9,18 @@ const validateUserSessionMiddleware = factory.createMiddleware(
 		const cookie = await getCookie(c)
 
 		if (!cookie || !cookie.token) {
-			return next()
+			return sendErrorResponse(c, ErrorName.INVALID_CREDENTIALS)
 		}
 
 		const result = await validateJWT(cookie.token)
 
 		if (!result.success && result.error === "TokenExpired") {
-			//*you need to refresh the token
+			deleteCookie(c, "token")
+			return sendErrorResponse(c, ErrorName.TOKEN_EXPIRED)
 		}
 
 		if (!result.success) {
-			//*the token is invalid, you win a 400 fuck you
+			return sendErrorResponse(c, ErrorName.INVALID_CREDENTIALS)
 		}
 
 		return next()

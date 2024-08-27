@@ -1,6 +1,6 @@
 export const Games = {
-	memoryGame: "memoryGame",
-	hangmanGame: "hangmanGame",
-	dragAndDropGame: "dragAndDropGame",
-	sentenceScrambleGame: "sentenceScrambleGame",
+	memoryGame: "MemoryGame",
+	hangmanGame: "HangmanGame",
+	dragAndDropGame: "DragAndDropGame",
+	sentenceScrambleGame: "SentenceScrambleGame",
 } as const
