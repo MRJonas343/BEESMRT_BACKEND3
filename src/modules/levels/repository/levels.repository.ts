@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm"
 import { db } from "../../../db/connection/poolConnection"
 import { levels, playerTrophies } from "../../../db/schemas"
-import { Result } from "../../../errors/resultT"
+import { Result } from "../../../utils"
 import {
 	LevelsResult,
 	PlayerTrophiesResult,

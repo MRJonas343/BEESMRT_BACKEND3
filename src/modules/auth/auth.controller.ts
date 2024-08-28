@@ -9,14 +9,15 @@ import {
 	updateCookie,
 } from "../../utils"
 import { deleteCookie } from "hono/cookie"
-
+import { isSuccess } from "../../utils"
 const factory = new Factory()
 
 const loginController = factory.createHandlers(async (c) => {
 	const body = await c.req.json()
 
 	const user = await findUser(body.email)
-	if (!user.success) {
+
+	if (!isSuccess(user) || !user.data) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 
@@ -24,12 +25,12 @@ const loginController = factory.createHandlers(async (c) => {
 
 	await updateCookie(c, token)
 
-	const { email, nickName, englishLevel } = user.data!
+	const { email, nickName, englishLevel } = user.data
 
 	return c.json({ email, nickName, englishLevel })
 })
 
-const signupController = factory.createHandlers(async (c) => {
+const signUpController = factory.createHandlers(async (c) => {
 	const { email, password, nickName, englishLevel } = await c.req.json()
 
 	const hashedPassword = await hashPassword(password)
@@ -58,4 +59,4 @@ const logOutController = factory.createHandlers(async (c) => {
 	return c.json({ succes: true })
 })
 
-export { loginController, signupController, logOutController }
+export { loginController, signUpController, logOutController }

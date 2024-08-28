@@ -1,6 +1,6 @@
 import { createFactory } from "hono/factory"
-import { newUserSchema } from "../interfaces/newUser.interface"
-import { sendErrorResponse } from "../../../utils/sendError"
+import { newUserSchema } from "../interfaces/user.interface"
+import { sendErrorResponse, isSuccess } from "../../../utils"
 import { ErrorName, zodErrorsMap } from "../../../errors/errors"
 import { findUser } from "../repository/auth.repository"
 
@@ -8,9 +8,10 @@ const factory = createFactory()
 
 const validateNewUserMiddleware = factory.createMiddleware(async (c, next) => {
 	const body = await c.req.json()
-	const newUser = newUserSchema.safeParse(body)
 
 	//*Check if the user data is valid
+	const newUser = newUserSchema.safeParse(body)
+
 	if (!newUser.success) {
 		const firstError = newUser.error.errors.find(
 			(err) =>
@@ -28,7 +29,8 @@ const validateNewUserMiddleware = factory.createMiddleware(async (c, next) => {
 
 	//*Check if the email already exists
 	const user = await findUser(body.email)
-	if (!user.success) {
+
+	if (!isSuccess(user)) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 

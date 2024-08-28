@@ -1,7 +1,7 @@
 import { Hono } from "hono"
 import {
 	loginController,
-	signupController,
+	signUpController,
 	logOutController,
 } from "./auth.controller"
 import {
@@ -13,7 +13,7 @@ const app = new Hono()
 
 app.post("/login", validateUserMiddleware, ...loginController)
 
-app.post("/signup", validateNewUserMiddleware, ...signupController)
+app.post("/signup", validateNewUserMiddleware, ...signUpController)
 
 app.post("/logout", ...logOutController)
 

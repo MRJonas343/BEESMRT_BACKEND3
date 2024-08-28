@@ -1,7 +1,9 @@
 import { Factory } from "hono/factory"
 import { getLevels, getTrophies } from "./repository/levels.repository"
-import { sendErrorResponse } from "../../utils"
+import { isSuccess, sendErrorResponse } from "../../utils"
 import { ErrorName } from "../../errors/errors"
+import { mergeLevels } from "./utils/mergeLevels"
+
 const factory = new Factory()
 
 const getAvailableLevelsController = factory.createHandlers(async (c) => {
@@ -12,33 +14,16 @@ const getAvailableLevelsController = factory.createHandlers(async (c) => {
 		getTrophies(game, email),
 	])
 
-	if (!levels.success || !levels.data) {
+	if (!isSuccess(levels) || !levels.data) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 
-	const mergeData = () => {
-		if (!trophies.success || !trophies.data) {
-			const data = levels.data?.map((level) => {
-				const { englishLevel, levelName, levels: Level } = level
-				return { englishLevel, levelName, Level, Trophys: 0 }
-			})
-		}
-		const data = levels.data?.map((level) => {
-			const { englishLevel, levelName, levels: Level } = level
-			const trophy =
-				trophies.success && trophies.data
-					? trophies.data.find((trophy) => trophy.level === Level)
-					: null
-			return {
-				englishLevel,
-				levelName,
-				Level,
-				Trophys: trophy ? trophy.trophys : 0,
-			}
-		})
-		return data
+	if (!isSuccess(trophies) || !trophies.data) {
+		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
-	const data = mergeData()
+
+	const data = mergeLevels(levels.data, trophies.data)
+
 	return c.json(data)
 })
 

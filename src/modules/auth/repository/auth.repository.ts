@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm"
 import { db } from "../../../db/connection/poolConnection"
-import { User } from "../interfaces/user.interface"
 import { users } from "../../../db/schemas"
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2"
-import { Result } from "../../../errors/resultT"
+import { Result } from "../../../utils"
+import { UserResult } from "../interfaces/user.interface"
 
-const findUser = async (email: string): Promise<Result<User | undefined>> => {
+const findUser = async (email: string): Promise<Result<UserResult>> => {
 	try {
 		const user = await db.query.users.findFirst({
 			where: eq(users.email, email),

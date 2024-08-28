@@ -2,7 +2,7 @@ import { createFactory } from "hono/factory"
 import { sendErrorResponse } from "../../../utils/sendError"
 import { ErrorName, zodErrorsMap } from "../../../errors/errors"
 import { findUser } from "../repository/auth.repository"
-import { existingUserSchema } from "../interfaces/newUser.interface"
+import { existingUserSchema } from "../interfaces/user.interface"
 import { comparePassword } from "../../../utils"
 
 const factory = createFactory()

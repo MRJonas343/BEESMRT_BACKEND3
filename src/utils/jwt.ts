@@ -1,13 +1,13 @@
 import { jwtVerify, SignJWT } from "jose"
 import { JWTExpired } from "jose/errors"
-import { Result } from "../errors/resultT"
+import { Result } from "./ResultType"
 
 const encodedSecret = new TextEncoder().encode(Bun.env.JWTSECRET)
 
 const createToken = async () => {
 	const jwt = await new SignJWT()
 		.setProtectedHeader({ alg: "HS256" })
-		.setExpirationTime("10d")
+		.setExpirationTime(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000))
 		.sign(encodedSecret)
 
 	return jwt
