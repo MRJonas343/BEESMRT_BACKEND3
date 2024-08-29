@@ -9,27 +9,10 @@ services:
       MYSQL_USER: ${DBUSER}
       MYSQL_PORT: ${DBPORT}
     volumes:
-      - db_data:/var/lib/mysql
       - ./init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     command: --init-file /docker-entrypoint-initdb.d/backup.sql
-
-  backend:
-    container_name: hono_backend
-    image: jhon343/beesmrtbackend:canary
-    depends_on:
-      - db
-    environment:
-      ENV : production
-      PORT : ${PORT}
-      DBHOST: ${DBHOSTPRODUCTION}
-      DBUSER: ${DBUSER}
-      DBPASS: ${DBPASS}
-      DBNAME: ${DBNAME}
-      DBPORT: ${DBPORT}
-    ports:
-      - "3000:3000"
 
 volumes:
   db_data:

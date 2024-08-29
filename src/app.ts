@@ -4,7 +4,7 @@ import levels from "./modules/levels"
 const app = new Hono()
 
 app.get("/", (c) => {
-	return c.json({ message: "Hello TTTT" })
+	return c.json("Welcome to BEESMRT API")
 })
 
 app.notFound((c) => {

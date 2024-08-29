@@ -15,6 +15,6 @@ RUN bun install
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["pm2-runtime", "start", "pm2.config.js"]

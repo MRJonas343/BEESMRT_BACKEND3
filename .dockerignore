@@ -3,6 +3,7 @@ node_modules
 .gitignore
 Dockerfile
 docker-compose.yml
+docker-compose.dev.yml
 bunfig.toml
 logs
 *.log

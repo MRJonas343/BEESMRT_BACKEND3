@@ -10,12 +10,14 @@ const validateUserSessionMiddleware = factory.createMiddleware(
 		const cookie = await getCookie(c)
 
 		if (!cookie || !cookie.token) {
+			deleteCookie(c, "token")
 			return sendErrorResponse(c, ErrorName.INVALID_CREDENTIALS)
 		}
 
 		const result = await validateJWT(cookie.token)
 
 		if (!result.success && result.error === "TokenExpired") {
+			deleteCookie(c, "token")
 			return sendErrorResponse(c, ErrorName.TOKEN_EXPIRED)
 		}
 
