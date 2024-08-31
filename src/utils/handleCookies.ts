@@ -1,19 +1,30 @@
 import { Context } from "hono"
 import { deleteCookie, setSignedCookie, getSignedCookie } from "hono/cookie"
-
 /**
- * Sets a new cookie with the provided token.
+ * Sets the access and refresh tokens in the cookies.
  *
  * @param c - The context object.
- * @param token - The token to be stored in the cookie.
- * @returns A promise that resolves when the cookie is set.
+ * @param accessToken - The access token to set in the cookie.
+ * @param refreshToken - The refresh token to set in the cookie.
+ * @returns A promise that resolves once the cookies have been set.
  */
-const setNewCookie = async (c: Context, token: string) => {
-	return await setSignedCookie(c, "token", token, Bun.env.COOKIESECRET, {
+const setAuthCookies = async (
+	c: Context,
+	accessToken: string,
+	refreshToken: string,
+) => {
+	await setSignedCookie(c, "accessToken", accessToken, Bun.env.COOKIESECRET, {
 		httpOnly: true,
 		secure: Bun.env.ENV === "production",
-		sameSite: "Lax" as const,
-		expires: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+		sameSite: "Lax",
+		expires: new Date(Date.now() + 15 * 60 * 1000),
+	})
+
+	await setSignedCookie(c, "refreshToken", refreshToken, Bun.env.COOKIESECRET, {
+		httpOnly: true,
+		secure: Bun.env.ENV === "production",
+		sameSite: "Lax",
+		expires: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
 	})
 }
 
@@ -25,8 +36,13 @@ const setNewCookie = async (c: Context, token: string) => {
  * @returns A promise that resolves once the cookie has been updated.
  */
 const updateCookie = async (c: Context, token: string) => {
-	deleteCookie(c, "token")
-	await setNewCookie(c, token)
+	deleteCookie(c, "accessToken")
+	await setSignedCookie(c, "accessToken", token, Bun.env.COOKIESECRET, {
+		httpOnly: true,
+		secure: Bun.env.ENV === "production",
+		sameSite: "Lax",
+		expires: new Date(Date.now() + 15 * 60 * 1000),
+	})
 }
 
 /**
@@ -40,4 +56,4 @@ const getCookie = async (c: Context) => {
 	return cookie
 }
 
-export { setNewCookie, updateCookie, getCookie }
+export { setAuthCookies, updateCookie, getCookie }

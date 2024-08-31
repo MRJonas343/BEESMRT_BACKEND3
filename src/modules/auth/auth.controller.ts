@@ -3,10 +3,13 @@ import { createUser, findUser } from "./repository/auth.repository"
 import {
 	hashPassword,
 	sendErrorResponse,
-	setNewCookie,
-	createToken,
+	createRefreshToken,
+	createAcessToken,
 	updateCookie,
 	isSuccess,
+	setAuthCookies,
+	getCookie,
+	getIDFromToken,
 } from "../../utils"
 import { deleteCookie } from "hono/cookie"
 import { ErrorName } from "../../errors"
@@ -24,8 +27,10 @@ const loginController = factory.createHandlers(async (c) => {
 
 	const { id, nickName, englishLevel } = user.data
 
-	const token = await createToken(String(id))
-	await updateCookie(c, token)
+	const accessToken = await createAcessToken(String(id))
+	const refreshToken = await createRefreshToken(String(id))
+
+	await setAuthCookies(c, accessToken, refreshToken)
 
 	return c.json({ id, nickName, englishLevel })
 })
@@ -47,17 +52,45 @@ const signUpController = factory.createHandlers(async (c) => {
 	}
 	const id = newUser.data![0].insertId
 
-	const token = await createToken(String(id))
+	const accessToken = await createAcessToken(String(id))
+	const refreshToken = await createRefreshToken(String(id))
 
-	await setNewCookie(c, token)
+	await setAuthCookies(c, accessToken, refreshToken)
 
 	return c.json({ id, nickName, englishLevel })
 })
 
+const refreshTokenController = factory.createHandlers(async (c) => {
+	const cookies = await getCookie(c)
+	const refreshToken = cookies?.refreshToken
+
+	if (!refreshToken) {
+		return sendErrorResponse(c, ErrorName.INVALID_CREDENTIALS)
+	}
+
+	const result = await getIDFromToken(refreshToken)
+
+	if (!result.success) {
+		deleteCookie(c, "refreshToken")
+		return sendErrorResponse(c, ErrorName.INVALID_CREDENTIALS)
+	}
+
+	const newAccessToken = await createAcessToken(String(result.data))
+	await updateCookie(c, newAccessToken)
+
+	return c.json({ success: true })
+})
+
 const logOutController = factory.createHandlers(async (c) => {
-	deleteCookie(c, "token")
+	deleteCookie(c, "accessToken")
+	deleteCookie(c, "refreshToken")
 
 	return c.json({ succes: true })
 })
 
-export { loginController, signUpController, logOutController }
+export {
+	loginController,
+	signUpController,
+	refreshTokenController,
+	logOutController,
+}

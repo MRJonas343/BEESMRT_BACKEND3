@@ -7,18 +7,21 @@ const factory = createFactory()
 
 const validateUserSessionMiddleware = factory.createMiddleware(
 	async (c, next) => {
-		const cookie = await getCookie(c)
+		const cookies = await getCookie(c)
+		const accessToken = cookies?.accessToken
+		const refreshToken = cookies?.refreshToken
 
-		if (!cookie || !cookie.token) {
-			deleteCookie(c, "token")
+		if (!accessToken && refreshToken) {
+			return sendErrorResponse(c, ErrorName.TOKEN_EXPIRED)
+		}
+
+		if (!accessToken) {
 			return sendErrorResponse(c, ErrorName.INVALID_CREDENTIALS)
 		}
 
-		const result = await getIDFromToken(cookie.token)
+		const result = await getIDFromToken(accessToken)
 
 		if (!result.success) {
-			deleteCookie(c, "token")
-
 			if (result.error === "TokenExpired") {
 				return sendErrorResponse(c, ErrorName.TOKEN_EXPIRED)
 			}
@@ -26,7 +29,6 @@ const validateUserSessionMiddleware = factory.createMiddleware(
 		}
 
 		c.set("userId", result.data)
-
 		return next()
 	},
 )

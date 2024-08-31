@@ -5,15 +5,30 @@ import { Result } from "./ResultType"
 const encodedSecret = new TextEncoder().encode(Bun.env.JWTSECRET)
 
 /**
- * Creates a JSON Web Token (JWT) for the given user ID.
+ * Creates an access token for a user.
  *
- * @param userId - The ID of the user.
- * @returns The generated JWT.
+ * @param userId - The user ID to create the access token for.
+ * @returns A promise that resolves to the access token.
  */
-const createToken = async (userId: string) => {
+const createAcessToken = async (userId: string) => {
 	const jwt = await new SignJWT({ userId })
 		.setProtectedHeader({ alg: "HS256" })
-		.setExpirationTime(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000))
+		.setExpirationTime(new Date(Date.now() + 15 * 60 * 1000))
+		.sign(encodedSecret)
+
+	return jwt
+}
+
+/**
+ * Creates a refresh token for a user.
+ *
+ * @param userId - The user ID to create the refresh token for.
+ * @returns A promise that resolves to the refresh token.
+ */
+const createRefreshToken = async (userId: string) => {
+	const jwt = await new SignJWT({ userId })
+		.setProtectedHeader({ alg: "HS256" })
+		.setExpirationTime(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000))
 		.sign(encodedSecret)
 
 	return jwt
@@ -39,4 +54,4 @@ const getIDFromToken = async (token: string): Promise<Result<string>> => {
 	}
 }
 
-export { createToken, getIDFromToken }
+export { createAcessToken, createRefreshToken, getIDFromToken }
