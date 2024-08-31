@@ -1,20 +1,16 @@
-FROM node
+FROM oven/bun:alpine AS base
+WORKDIR /app
 
-RUN curl -fsSL https://bun.sh/install | bash
+FROM base AS install
+RUN mkdir -p /temp/prod
+COPY package.json bun.lockb /temp/prod/
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
-ENV BUN_INSTALL="/root/.bun"
-ENV PATH="${BUN_INSTALL}/bin:${PATH}"
-
-RUN bun install pm2 -g
-
-WORKDIR /home/beesmrtbackend
-
-COPY package.json bun.lockb ./
-
-RUN bun install
-
+FROM base AS release
+COPY --from=install /temp/prod/node_modules node_modules
 COPY . .
 
-EXPOSE 4000
+USER bun
+EXPOSE 3000
 
-CMD ["pm2-runtime", "start", "pm2.config.js"]
+ENTRYPOINT [ "bun", "run", "src/server.ts" ]
