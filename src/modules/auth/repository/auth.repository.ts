@@ -1,14 +1,20 @@
 import { eq } from "drizzle-orm"
 import { db } from "../../../db/connection/poolConnection"
-import { users } from "../../../db/schemas"
+import { Users } from "../../../db/schemas"
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2"
 import { Result } from "../../../utils"
 import { UserResult } from "../interfaces/user.interface"
 
+/**
+ * Finds a user by their email address.
+ *
+ * @param email - The email address of the user to find.
+ * @returns A promise that resolves to a Result object containing the user data if found, or an error message if not found.
+ */
 const findUser = async (email: string): Promise<Result<UserResult>> => {
 	try {
-		const user = await db.query.users.findFirst({
-			where: eq(users.email, email),
+		const user = await db.query.Users.findFirst({
+			where: eq(Users.email, email),
 		})
 
 		return { success: true, data: user }
@@ -17,6 +23,15 @@ const findUser = async (email: string): Promise<Result<UserResult>> => {
 	}
 }
 
+/**
+ * Creates a new user with the provided information.
+ *
+ * @param email - The email of the user.
+ * @param password - The password of the user.
+ * @param nickName - The nickname of the user.
+ * @param englishLevel - The English level of the user.
+ * @returns A promise that resolves to a Result object containing the success status and the created user data, or an error message if the user creation fails.
+ */
 const createUser = async (
 	email: string,
 	password: string,
@@ -25,7 +40,7 @@ const createUser = async (
 ): Promise<Result<MySqlRawQueryResult>> => {
 	try {
 		const result = await db
-			.insert(users)
+			.insert(Users)
 			.values({ email, password, nickName, englishLevel })
 
 		return { success: true, data: result }

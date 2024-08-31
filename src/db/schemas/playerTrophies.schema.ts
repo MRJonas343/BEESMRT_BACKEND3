@@ -1,9 +1,9 @@
 import { mysqlTable, serial, varchar, int } from "drizzle-orm/mysql-core"
 
-export const playerTrophies = mysqlTable("players_trophies", {
+export const PlayerTrophies = mysqlTable("PlayersTrophies", {
 	id: serial("id").primaryKey(),
-	level: varchar("Level", { length: 9 }),
-	game: varchar("Game", { length: 25 }),
-	trophys: int("Trophys"),
+	level: varchar("level", { length: 9 }),
+	game: varchar("game", { length: 25 }),
+	trophies: int("trophies"),
 	userId: int("userId").notNull(),
 })

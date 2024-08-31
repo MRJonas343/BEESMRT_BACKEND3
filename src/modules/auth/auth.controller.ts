@@ -1,5 +1,4 @@
 import { Factory } from "hono/factory"
-import { ErrorName } from "../../errors/errors"
 import { createUser, findUser } from "./repository/auth.repository"
 import {
 	hashPassword,
@@ -7,9 +6,11 @@ import {
 	setNewCookie,
 	createToken,
 	updateCookie,
+	isSuccess,
 } from "../../utils"
 import { deleteCookie } from "hono/cookie"
-import { isSuccess } from "../../utils"
+import { ErrorName } from "../../errors"
+
 const factory = new Factory()
 
 const loginController = factory.createHandlers(async (c) => {

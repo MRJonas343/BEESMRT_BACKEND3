@@ -3,12 +3,22 @@ import {
 	LevelsResult,
 } from "../interfaces/levelsResult.interface"
 
-const mergeLevels = (levels: LevelsResult, trophies: PlayerTrophiesResult) => {
-	const data = levels.map((level) => {
-		const { englishLevel, levelName, levels: Level } = level
-		const userTrophy = trophies.find((trophy) => trophy.level === Level)
-		const Trophys = userTrophy ? userTrophy.trophys : 0
-		return { englishLevel, levelName, Level, Trophys }
+/**
+ * Merges the levels array with the trophies array to create a new array of merged data.
+ *
+ * @param levelsArray - The array of levels to be merged.
+ * @param trophiesArray - The array of player trophies to be merged.
+ * @returns The merged array containing the englishLevel, levelName, level, and trophies for each level.
+ */
+const mergeLevels = (
+	levelsArray: LevelsResult,
+	trophiesArray: PlayerTrophiesResult,
+) => {
+	const data = levelsArray.map((result) => {
+		const { englishLevel, levelName, level } = result
+		const userTrophy = trophiesArray.find((trophy) => trophy.level === level)
+		const trophies = userTrophy ? userTrophy.trophies : 0
+		return { englishLevel, levelName, level, trophies }
 	})
 
 	return data

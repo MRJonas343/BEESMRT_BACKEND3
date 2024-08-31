@@ -1,19 +1,19 @@
 import {
-	dragAndDropGame,
-	levels,
-	messagesForm,
-	hangmanGameLevels,
-	memoryGameLevels,
-	users,
-	playerTrophies,
+	Levels,
+	Users,
+	DragAndDropGame,
+	HangmanGameLevels,
+	MemoryGameLevels,
+	Messages,
+	PlayerTrophies,
 } from "../schemas"
 
 export const tablesSchemas = {
-	levels,
-	dragAndDropGame,
-	messagesForm,
-	hangmanGameLevels,
-	memoryGameLevels,
-	users,
-	playerTrophies,
+	Levels,
+	Users,
+	DragAndDropGame,
+	HangmanGameLevels,
+	MemoryGameLevels,
+	Messages,
+	PlayerTrophies,
 }
