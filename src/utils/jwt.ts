@@ -4,8 +4,8 @@ import { Result } from "./ResultType"
 
 const encodedSecret = new TextEncoder().encode(Bun.env.JWTSECRET)
 
-const createToken = async () => {
-	const jwt = await new SignJWT()
+const createToken = async (userId: string) => {
+	const jwt = await new SignJWT({ userId })
 		.setProtectedHeader({ alg: "HS256" })
 		.setExpirationTime(new Date(Date.now() + 5 * 24 * 60 * 60 * 1000))
 		.sign(encodedSecret)
@@ -13,11 +13,11 @@ const createToken = async () => {
 	return jwt
 }
 
-const validateJWT = async (token: string): Promise<Result<boolean>> => {
+const getIDFromToken = async (token: string): Promise<Result<string>> => {
 	try {
 		const jwt = await jwtVerify(token, encodedSecret)
 
-		return { success: true }
+		return { success: true, data: String(jwt.payload.userId) }
 	} catch (error: unknown) {
 		if (error instanceof JWTExpired) {
 			return { success: false, error: "TokenExpired" }
@@ -27,4 +27,4 @@ const validateJWT = async (token: string): Promise<Result<boolean>> => {
 	}
 }
 
-export { createToken, validateJWT }
+export { createToken, getIDFromToken }

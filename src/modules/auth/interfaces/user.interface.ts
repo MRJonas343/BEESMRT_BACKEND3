@@ -4,7 +4,7 @@ import { db } from "../../../db/connection/poolConnection"
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/
 
 export const newUserSchema = z.object({
-	email: z.string().email().min(5),
+	email: z.string().email().min(5).max(50),
 	password: z
 		.string()
 		.min(8, { message: "Password must be at least 8 characters long" })

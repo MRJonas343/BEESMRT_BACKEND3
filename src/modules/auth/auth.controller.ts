@@ -21,13 +21,12 @@ const loginController = factory.createHandlers(async (c) => {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 
-	const token = await createToken()
+	const { id, nickName, englishLevel } = user.data
 
+	const token = await createToken(String(id))
 	await updateCookie(c, token)
 
-	const { email, nickName, englishLevel } = user.data
-
-	return c.json({ email, nickName, englishLevel })
+	return c.json({ id, nickName, englishLevel })
 })
 
 const signUpController = factory.createHandlers(async (c) => {
@@ -45,12 +44,13 @@ const signUpController = factory.createHandlers(async (c) => {
 	if (!newUser.success) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
+	const id = newUser.data![0].insertId
 
-	const token = await createToken()
+	const token = await createToken(String(id))
 
 	await setNewCookie(c, token)
 
-	return c.json({ email, nickName, englishLevel })
+	return c.json({ id, nickName, englishLevel })
 })
 
 const logOutController = factory.createHandlers(async (c) => {

@@ -7,5 +7,4 @@ export const levelDataSchema = z.object({
 		"DragAndDropGame",
 		"SentenceScrambleGame",
 	]),
-	email: z.string().email().min(5),
 })

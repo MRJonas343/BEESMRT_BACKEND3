@@ -1,15 +1,15 @@
 import { createFactory } from "hono/factory"
 import { levelDataSchema } from "../interfaces/levelSchema.interface"
-import { ErrorName, zodErrorsMap } from "../../../errors/errors"
+import { ErrorName, zodErrorsMap } from "../../../errors/"
 import { sendErrorResponse } from "../../../utils"
 
 const factory = createFactory()
 
 const validateLevelDataMiddleware = factory.createMiddleware(
 	async (c, next) => {
-		const { game, email } = c.req.query()
+		const { game } = c.req.query()
 
-		const levelData = levelDataSchema.safeParse({ game, email })
+		const levelData = levelDataSchema.safeParse({ game })
 
 		if (!levelData.success) {
 			const firstError = levelData.error.errors.find(

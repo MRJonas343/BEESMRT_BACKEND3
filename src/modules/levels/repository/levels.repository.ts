@@ -20,12 +20,12 @@ const getLevels = async (game: string): Promise<Result<LevelsResult>> => {
 
 const getTrophies = async (
 	game: string,
-	email: string,
+	userId: number,
 ): Promise<Result<PlayerTrophiesResult>> => {
 	try {
 		const result = await db.query.playerTrophies.findMany({
 			where: and(
-				eq(playerTrophies.emailUser, email),
+				eq(playerTrophies.userId, userId),
 				eq(playerTrophies.game, game),
 			),
 		})

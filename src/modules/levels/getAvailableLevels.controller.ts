@@ -7,11 +7,13 @@ import { mergeLevels } from "./utils/mergeLevels"
 const factory = new Factory()
 
 const getAvailableLevelsController = factory.createHandlers(async (c) => {
-	const { game, email } = c.req.query()
+	const { game } = c.req.query()
+
+	const userId = c.get("userId")
 
 	const [levels, trophies] = await Promise.all([
 		getLevels(game),
-		getTrophies(game, email),
+		getTrophies(game, userId),
 	])
 
 	if (!isSuccess(levels) || !levels.data) {
