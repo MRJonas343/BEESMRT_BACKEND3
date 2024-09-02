@@ -1,4 +1,4 @@
-import { db } from "../../../db/connection/poolConnection"
+import { db } from "@db"
 
 export type LevelsResult = Awaited<ReturnType<typeof db.query.Levels.findMany>>
 

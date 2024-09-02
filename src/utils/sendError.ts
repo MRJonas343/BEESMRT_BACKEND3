@@ -1,5 +1,5 @@
+import { errorCodeMap, ErrorName } from "@error"
 import type { Context } from "hono"
-import { errorCodeMap, ErrorName } from "../errors"
 
 /**
  * Sends an error response with the specified error name and status code.

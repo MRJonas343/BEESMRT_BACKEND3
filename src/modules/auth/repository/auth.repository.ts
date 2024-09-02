@@ -1,8 +1,8 @@
+import { captureException } from "@sentry/bun"
+import { db, Users } from "@db"
+import { Result } from "@utils"
 import { eq } from "drizzle-orm"
-import { db } from "../../../db/connection/poolConnection"
-import { Users } from "../../../db/schemas"
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2"
-import { Result } from "../../../utils"
 import { UserResult } from "../interfaces/user.interface"
 
 /**
@@ -19,7 +19,8 @@ const findUser = async (email: string): Promise<Result<UserResult>> => {
 
 		return { success: true, data: user }
 	} catch (error) {
-		return { success: false, error: "Error finding user" }
+		captureException(error)
+		return { success: false, error: "Error" }
 	}
 }
 
@@ -45,7 +46,8 @@ const createUser = async (
 
 		return { success: true, data: result }
 	} catch (error) {
-		return { success: false, error: "Error creating user" }
+		captureException(error)
+		return { success: false, error: "Error" }
 	}
 }
 

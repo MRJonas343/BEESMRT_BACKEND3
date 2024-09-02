@@ -1,5 +1,5 @@
+import { db } from "@db"
 import { z } from "zod"
-import { db } from "../../../db/connection/poolConnection"
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/
 

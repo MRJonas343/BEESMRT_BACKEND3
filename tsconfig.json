@@ -12,6 +12,12 @@
 		"skipLibCheck": true,
 		"noEmit": true,
 		"resolveJsonModule": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"paths": {
+			"@utils": ["./src/utils"],
+			"@middlewares": ["./src/middlewares"],
+			"@error": ["./src/errors"],
+			"@db": ["./src/db"]
+		}
 	}
 }

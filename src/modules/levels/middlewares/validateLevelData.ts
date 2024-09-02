@@ -1,7 +1,7 @@
+import { ErrorName, zodErrorsMap } from "@error"
+import { sendErrorResponse } from "@utils"
 import { createFactory } from "hono/factory"
 import { levelDataSchema } from "../interfaces/levelSchema.interface"
-import { ErrorName, zodErrorsMap } from "../../../errors/"
-import { sendErrorResponse } from "../../../utils"
 
 const factory = createFactory()
 

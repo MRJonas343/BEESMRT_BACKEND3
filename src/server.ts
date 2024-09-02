@@ -1,8 +1,14 @@
+import { init } from "@sentry/bun"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import app from "./app"
 
 const server = new Hono()
+
+init({
+	dsn: Bun.env.SENTRY_DSN,
+	tracesSampleRate: 1.0,
+})
 
 server.use(
 	cors({

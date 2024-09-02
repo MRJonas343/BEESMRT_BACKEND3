@@ -3,23 +3,23 @@
 	"organizeImports": {
 		"enabled": true
 	},
-	"javascript":{
+	"javascript": {
 		"formatter": {
-			"semicolons" : "asNeeded"
+			"semicolons": "asNeeded"
 		}
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true,
-			"style" :{
+			"style": {
 				"useImportType": "off",
 				"noNonNullAssertion": "off"
 			},
-			"a11y" : {
-				 "useKeyWithClickEvents": "off"
+			"a11y": {
+				"useKeyWithClickEvents": "off"
 			},
-			"correctness" : {
+			"correctness": {
 				"useExhaustiveDependencies": "off"
 			},
 			"suspicious": {

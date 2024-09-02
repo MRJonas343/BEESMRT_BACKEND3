@@ -1,7 +1,7 @@
+import { ErrorName, zodErrorsMap } from "@error"
+import { isSuccess, sendErrorResponse } from "@utils"
 import { createFactory } from "hono/factory"
 import { newUserSchema } from "../interfaces/user.interface"
-import { sendErrorResponse, isSuccess } from "../../../utils"
-import { ErrorName, zodErrorsMap } from "../../../errors/errors"
 import { findUser } from "../repository/auth.repository"
 
 const factory = createFactory()

@@ -1,8 +1,8 @@
-import { Factory } from "hono/factory"
+import { isSuccess, sendErrorResponse } from "@utils"
+import { ErrorName } from "@error"
 import { getLevels, getTrophies } from "./repository/levels.repository"
-import { isSuccess, sendErrorResponse } from "../../utils"
-import { ErrorName } from "../../errors/errors"
 import { mergeLevels } from "./utils/mergeLevels"
+import { Factory } from "hono/factory"
 
 const factory = new Factory()
 

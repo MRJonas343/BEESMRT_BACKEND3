@@ -1,8 +1,8 @@
+import { ErrorName, zodErrorsMap } from "@error"
+import { comparePassword, sendErrorResponse } from "@utils"
 import { createFactory } from "hono/factory"
 import { findUser } from "../repository/auth.repository"
 import { existingUserSchema } from "../interfaces/user.interface"
-import { comparePassword, sendErrorResponse } from "../../../utils"
-import { ErrorName, zodErrorsMap } from "../../../errors"
 
 const factory = createFactory()
 
