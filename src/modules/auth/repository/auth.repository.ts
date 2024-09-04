@@ -1,4 +1,3 @@
-import { captureException } from "@sentry/bun"
 import { db, Users } from "@db"
 import { Result } from "@utils"
 import { eq } from "drizzle-orm"
@@ -19,7 +18,6 @@ const findUser = async (email: string): Promise<Result<UserResult>> => {
 
 		return { success: true, data: user }
 	} catch (error) {
-		captureException(error)
 		return { success: false, error: "Error" }
 	}
 }
@@ -46,7 +44,6 @@ const createUser = async (
 
 		return { success: true, data: result }
 	} catch (error) {
-		captureException(error)
 		return { success: false, error: "Error" }
 	}
 }

@@ -1,4 +1,3 @@
-import { captureException } from "@sentry/bun"
 import { db, Levels, PlayerTrophies } from "@db"
 import { Result } from "@utils"
 import { and, eq } from "drizzle-orm"
@@ -20,7 +19,6 @@ const getLevels = async (game: string): Promise<Result<LevelsResult>> => {
 		})
 		return { success: true, data: result }
 	} catch (error) {
-		captureException(error)
 		return { success: false, error: "Error" }
 	}
 }
@@ -45,7 +43,6 @@ const getTrophies = async (
 		})
 		return { success: true, data: result }
 	} catch (error) {
-		captureException(error)
 		return { success: false, error: "Error" }
 	}
 }
