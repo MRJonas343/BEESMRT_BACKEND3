@@ -1,6 +1,6 @@
 import { isSuccess, sendErrorResponse } from "@utils"
 import { ErrorName } from "@error"
-import { getLevels, getTrophies } from "./repository/levels.repository"
+import { getCompletedLevels, getLevels } from "./repository/levels.repository"
 import { mergeLevels } from "./utils/mergeLevels"
 import { Factory } from "hono/factory"
 
@@ -11,20 +11,20 @@ const getAvailableLevelsController = factory.createHandlers(async (c) => {
 
 	const userId = c.get("userId")
 
-	const [levels, trophies] = await Promise.all([
+	const [levels, completedLevels] = await Promise.all([
 		getLevels(game),
-		getTrophies(game, userId),
+		getCompletedLevels(game, userId),
 	])
 
 	if (!isSuccess(levels) || !levels.data) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 
-	if (!isSuccess(trophies) || !trophies.data) {
+	if (!isSuccess(completedLevels) || !completedLevels.data) {
 		return sendErrorResponse(c, ErrorName.SERVER_ERROR)
 	}
 
-	const data = mergeLevels(levels.data, trophies.data)
+	const data = mergeLevels(levels.data, completedLevels.data)
 
 	return c.json(data)
 })

@@ -33,4 +33,4 @@ export type newUser = z.infer<typeof newUserSchema>
 
 export type existingUser = z.infer<typeof existingUserSchema>
 
-export type UserResult = Awaited<ReturnType<typeof db.query.Users.findFirst>>
+export type UserResult = Awaited<ReturnType<typeof db.query.users.findFirst>>

@@ -1,19 +1,19 @@
 import {
-	Levels,
-	Users,
+	availabLevels,
+	users,
 	DragAndDropGame,
 	HangmanGameLevels,
 	MemoryGameLevels,
-	Messages,
-	PlayerTrophies,
+	messages,
+	gameLogs,
 } from "../schemas"
 
 export const tablesSchemas = {
-	Levels,
-	Users,
+	availabLevels,
+	users,
 	DragAndDropGame,
 	HangmanGameLevels,
 	MemoryGameLevels,
-	Messages,
-	PlayerTrophies,
+	messages,
+	gameLogs,
 }

@@ -4,23 +4,24 @@ import {
 } from "../interfaces/levelsResult.interface"
 
 /**
- * Merges the levels array with the trophies array to create a new array of merged data.
+ * Merges the levels array with the completedLevels array to create a new array of merged data.
  *
  * @param levelsArray - The array of levels to be merged.
- * @param trophiesArray - The array of player trophies to be merged.
- * @returns The merged array containing the englishLevel, levelName, level, and trophies for each level.
+ * @param completedLevels - The array of player trophies for completed levels to be merged.
+ * @returns The merged array containing the id, englishLevel, levelName, level, trophies, and isCompleted for each level.
  */
 const mergeLevels = (
 	levelsArray: LevelsResult,
-	trophiesArray: PlayerTrophiesResult,
+	completedLevels: PlayerTrophiesResult,
 ) => {
 	const data = levelsArray.map((result) => {
-		const { englishLevel, levelName, level } = result
-		const userTrophy = trophiesArray.find((trophy) => trophy.level === level)
-		const trophies = userTrophy ? userTrophy.trophies : 0
-		return { englishLevel, levelName, level, trophies }
+		const { id, englishLevel, levelName, level, trophies } = result
+		const completedLevel = completedLevels.find(
+			(gameLog) => gameLog.level === level,
+		)
+		const isCompleted = Boolean(completedLevel?.isCompleted)
+		return { id, englishLevel, levelName, level, trophies, isCompleted }
 	})
-
 	return data
 }
 

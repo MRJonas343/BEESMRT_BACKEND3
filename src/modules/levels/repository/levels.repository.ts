@@ -1,4 +1,4 @@
-import { db, Levels, PlayerTrophies } from "@db"
+import { db, availabLevels, gameLogs} from "@db"
 import { Result } from "@utils"
 import { and, eq } from "drizzle-orm"
 import {
@@ -14,8 +14,8 @@ import {
  */
 const getLevels = async (game: string): Promise<Result<LevelsResult>> => {
 	try {
-		const result = await db.query.Levels.findMany({
-			where: eq(Levels.game, game),
+		const result = await db.query.availabLevels.findMany({
+			where: eq(availabLevels.game, game),
 		})
 		return { success: true, data: result }
 	} catch (error) {
@@ -30,21 +30,22 @@ const getLevels = async (game: string): Promise<Result<LevelsResult>> => {
  * @param userId - The ID of the user.
  * @returns A promise that resolves to a Result object containing the player's trophies if successful, or an error message if unsuccessful.
  */
-const getTrophies = async (
+const getCompletedLevels = async (
 	game: string,
 	userId: number,
 ): Promise<Result<PlayerTrophiesResult>> => {
 	try {
-		const result = await db.query.PlayerTrophies.findMany({
+		const result = await db.query.gameLogs.findMany({
 			where: and(
-				eq(PlayerTrophies.userId, userId),
-				eq(PlayerTrophies.game, game),
+				eq(gameLogs.userId, userId),
+				eq(gameLogs.game, game),
 			),
 		})
+		console.log(result)
 		return { success: true, data: result }
 	} catch (error) {
 		return { success: false, error: "Error" }
 	}
 }
 
-export { getLevels, getTrophies }
+export { getLevels, getCompletedLevels }

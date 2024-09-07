@@ -1,4 +1,4 @@
-import { db, Users } from "@db"
+import { db, users } from "@db"
 import { Result } from "@utils"
 import { eq } from "drizzle-orm"
 import { MySqlRawQueryResult } from "drizzle-orm/mysql2"
@@ -12,8 +12,8 @@ import { UserResult } from "../interfaces/user.interface"
  */
 const findUser = async (email: string): Promise<Result<UserResult>> => {
 	try {
-		const user = await db.query.Users.findFirst({
-			where: eq(Users.email, email),
+		const user = await db.query.users.findFirst({
+			where: eq(users.email, email),
 		})
 
 		return { success: true, data: user }
@@ -39,7 +39,7 @@ const createUser = async (
 ): Promise<Result<MySqlRawQueryResult>> => {
 	try {
 		const result = await db
-			.insert(Users)
+			.insert(users)
 			.values({ email, password, nickName, englishLevel })
 
 		return { success: true, data: result }
